@@ -1,14 +1,11 @@
 import cv2
-from flask import Flask, request
+from flask import Flask, request, jsonify
 from flask_cors import CORS
 import numpy as np
 from io import BytesIO
-import tensorflow as tf
 from PIL import Image
 from skimage import transform
 from keras.models import load_model
-from flask import request, jsonify
-
 app = Flask(__name__)
 CORS(app)
 
@@ -16,32 +13,6 @@ CORS(app)
 @app.route('/')
 def helloworld():
     return 'Prediction Home Page'
-
-
-@app.route('/upload', methods=['POST'])
-def upload_file():
-    if request.method == 'POST':
-        file = request.files.getlist('images[]')
-        print(file)
-        # for imagesingle in f:
-        #     image = Image.open(BytesIO(imagesingle.read()))
-        #     print(predict(face_crop_image(image), model))
-        # if predict(face_crop_image(image), model):
-        #     return {"response": "the user has an autism", "result": "True"}
-        # else:
-        #     return {"response": "the user hasn't an autism", "result": "False"}
-        # return send_from_direcaory(app.config['UPLOAD_FOLDER'], filename, as_attachment=True)
-
-
-def multi_images_predict(filenames):
-    counter = 0
-    count_detect = 0
-    for i in filenames:
-        print(counter)
-        if prediction(face_crop_image(Image.open(BytesIO(i.read()))), model_autism=model):
-            count_detect += 1
-        counter += 1
-    return count_detect / counter
 
 
 @app.route('/uploads', methods=['POST', 'GET'])
@@ -59,14 +30,24 @@ def upload_files():
         return jsonify({"Error 405 ": "The method is not allowed for the requested URL this API is \'POST\'"}), 405
 
 
+def multi_images_predict(files):
+    counter = 0
+    count_detect = 0
+    for image in files:
+        print('counter =>', counter)
+        if prediction(face_crop_image(image=Image.open(BytesIO(image.read()))), model_autism=model):
+           count_detect += 1
+        counter += 1
+    return count_detect / counter
+
+
 def prediction(image, model_autism):
-    np_image = np.array(image).astype('float32') / 255
-    np_image = transform.resize(np_image, (224, 224, 3))
+    resized_image = cv2.resize(np.array(image), (224, 224))
+    np_image = resized_image.astype('float32') / 255
     np_image = np.expand_dims(np_image, axis=0)
-    img = tf.image.resize(np_image, (224, 224))  # Resize the image
-    res = model_autism.predict(img)[0].argmax()
-    print(res)
+    res = model_autism.predict(np_image)[0].argmax()
     return res == 1
+
 
 
 def face_crop_image(image):
