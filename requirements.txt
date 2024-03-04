@@ -1,8 +1,6 @@
 opencv-python
-flask
-flask-cors
+Flask
+Flask-Cors
 numpy
-tensorflow
 Pillow
-scikit-image
 keras
