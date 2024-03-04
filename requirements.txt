@@ -5,4 +5,3 @@ numpy
 Pillow
 keras
 tensorflow
-tensorflow-tensorrt
