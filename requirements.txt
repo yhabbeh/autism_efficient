@@ -4,3 +4,4 @@ Flask-Cors
 numpy
 Pillow
 keras
+tensorflow
