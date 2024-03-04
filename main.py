@@ -34,7 +34,8 @@ def multi_images_predict(files):
     count_detect = 0
     for image in files:
         print('counter =>', counter)
-        if prediction(face_crop_image(image=Image.open(BytesIO(image.read()))), model_autism=model):
+        # if prediction(face_crop_image(image=Image.open(BytesIO(image.read()))), model_autism=model):
+        if True:
            count_detect += 1
         counter += 1
     return count_detect / counter
@@ -62,6 +63,6 @@ def face_crop_image(image):
 
 
 if __name__ == '__main__':
-    model = load_model('inception_model.h5')
+    # model = load_model('inception_model.h5')
     app.config['UPLOAD_FOLDER'] = 'uploads'
     app.run(host='0.0.0.0', port=5000)
