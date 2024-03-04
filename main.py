@@ -4,7 +4,6 @@ from flask_cors import CORS
 import numpy as np
 from io import BytesIO
 from PIL import Image
-from skimage import transform
 from keras.models import load_model
 app = Flask(__name__)
 CORS(app)
@@ -47,7 +46,6 @@ def prediction(image, model_autism):
     np_image = np.expand_dims(np_image, axis=0)
     res = model_autism.predict(np_image)[0].argmax()
     return res == 1
-
 
 
 def face_crop_image(image):
