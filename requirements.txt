@@ -1,6 +1,10 @@
-opencv-python
 flask
 flask-cors
 numpy
 Pillow
 keras
+uvicorn
+tensorflow
+scikit-image
+gunicorn
+opencv-python
